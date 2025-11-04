@@ -24,7 +24,7 @@ static int nthreads = 1;
 // Example:
 // static pthread_mutex_t global_lock = PTHREAD_MUTEX_INITIALIZER;
 // --------------------------------------------------------------------
-static pthread_mutex_t global_lock = PTHREAD_MUTEX_INITIALIZER;
+//static pthread_mutex_t global_lock = PTHREAD_MUTEX_INITIALIZER;
 
 
 // --------------------------------------------------------------------
@@ -45,6 +45,8 @@ typedef struct {
 // Example:
 // static pthread_barrier_t phase_barrier;
 // --------------------------------
+static pthread_barrier_t phase_barrier;
+
 
 //-------------------------------------------------------------------------------------
 // TODO (Part 4)S: - Per-Segment Locks):
@@ -122,12 +124,12 @@ void *thread_main(void *arg) {
     // pthread_mutex_unlock(&seg_locks[seg]);
     // ---------------------------------------------------------------
    
-pthread_mutex_lock(&global_lock);
+//pthread_mutex_lock(&global_lock);
 
     for (int id = start; id < end; id++) {
       put_user(id);
     }
-pthread_mutex_unlock(&global_lock);
+//pthread_mutex_unlock(&global_lock);
 
 
     unsigned long long t1 = now_ns();
@@ -143,6 +145,7 @@ pthread_mutex_unlock(&global_lock);
     // Example:
     // pthread_barrier_wait(&phase_barrier);
     //-----------------------------------------------------------------
+    pthread_barrier_wait(&phase_barrier);
 
     // Get Phase:  look up all users - all threads, each looks up one portion
         
@@ -158,12 +161,12 @@ pthread_mutex_unlock(&global_lock);
     // }
     // pthread_mutex_unlock(&global_lock);
     // --------------------------------------------------------------- 
-pthread_mutex_lock(&global_lock);
+//pthread_mutex_lock(&global_lock);
 
     for (int id = 0; id < NUM_USERS; id++) {
 	    if (!get_user(id)) missing++;
     }
-pthread_mutex_unlock(&global_lock);
+//pthread_mutex_unlock(&global_lock);
  
     unsigned long long t3 = now_ns();
     // calculate time spent on gets
@@ -193,6 +196,8 @@ int main(int argc, char **argv) {
     // Example:
     // pthread_barrier_init(&phase_barrier, NULL, nthreads);
     //---------------------------------------------------------
+    pthread_barrier_init(&phase_barrier, NULL, nthreads);
+
 
     //--------------------------------------------------------
     // TODO (Part 4)S - Initialize segment locks
