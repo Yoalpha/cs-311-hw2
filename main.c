@@ -7,8 +7,8 @@
  Initially: no locks → race conditions will occur.
  Students will first add a global mutex for correctness.
  Later, they will explore finer-grained locking approaches.
-* 
 */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
@@ -24,8 +24,6 @@ static int nthreads = 1;
 // Example:
 // static pthread_mutex_t global_lock = PTHREAD_MUTEX_INITIALIZER;
 // --------------------------------------------------------------------
-static pthread_mutex_t global_lock = PTHREAD_MUTEX_INITIALIZER;
-
 
 // --------------------------------------------------------------------
 // TODO (Part 4)S: Add a global mutex lock here for protecting the table.
@@ -110,8 +108,6 @@ void *thread_main(void *arg) {
     // }
     // pthread_mutex_unlock(&global_lock);
     // ---------------------------------------------------------------
-    
-
 
     // ---------------------------------------------------------------
     // TODO (Part 4)S: Segment lock around the write of the shared table.
@@ -123,14 +119,10 @@ void *thread_main(void *arg) {
     // } 
     // pthread_mutex_unlock(&seg_locks[seg]);
     // ---------------------------------------------------------------
-    pthread_mutex_lock(&global_lock);
-    
+   
     for (int id = start; id < end; id++) {
       put_user(id);
-
     }
-     pthread_mutex_unlock(&global_lock);
-
 
     unsigned long long t1 = now_ns();
     // calculate time spent on puts
@@ -160,14 +152,10 @@ void *thread_main(void *arg) {
     // }
     // pthread_mutex_unlock(&global_lock);
     // --------------------------------------------------------------- 
-    
-    pthread_mutex_lock(&global_lock);
+  
     for (int id = 0; id < NUM_USERS; id++) {
 	    if (!get_user(id)) missing++;
     }
-    
-    pthread_mutex_unlock(&global_lock);
-
     
     unsigned long long t3 = now_ns();
     // calculate time spent on gets
