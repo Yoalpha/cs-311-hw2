@@ -1,4 +1,4 @@
-CC = gcc-15
+CC = gcc
 CFLAGS = -g -O2 -pthread
 MAIN ?= main.c
 
