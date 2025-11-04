@@ -129,14 +129,16 @@ void *thread_main(void *arg) {
    
 //pthread_mutex_lock(&global_lock);
 
-    int seg = seg_index_for_id(id);
-    pthread_mutex_lock(&seg_locks[seg]);
-
+    
     for (int id = start; id < end; id++) {
-      put_user(id);
+        int seg = seg_index_for_id(id);
+        pthread_mutex_lock(&seg_locks[seg]);
+
+        put_user(id);
+
+        pthread_mutex_unlock(&seg_locks[seg]);
     }
 
-    pthread_mutex_unlock(&seg_locks[seg]);
 
 
 //pthread_mutex_unlock(&global_lock);
