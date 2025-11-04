@@ -47,7 +47,7 @@ typedef struct {
 // Example:
 // static pthread_barrier_t phase_barrier;
 // --------------------------------
-// static pthread_barrier_t phase_barrier;
+static pthread_barrier_t phase_barrier;
 
 
 //-------------------------------------------------------------------------------------
@@ -157,7 +157,7 @@ void *thread_main(void *arg) {
     // Example:
     // pthread_barrier_wait(&phase_barrier);
     //-----------------------------------------------------------------
-    // pthread_barrier_wait(&phase_barrier);
+    pthread_barrier_wait(&phase_barrier);
 
     // Get Phase:  look up all users - all threads, each looks up one portion
         
@@ -208,7 +208,7 @@ int main(int argc, char **argv) {
     // Example:
     // pthread_barrier_init(&phase_barrier, NULL, nthreads);
     //---------------------------------------------------------
-    //pthread_barrier_init(&phase_barrier, NULL, nthreads);
+    pthread_barrier_init(&phase_barrier, NULL, nthreads);
 
 
     //--------------------------------------------------------
