@@ -32,6 +32,8 @@ static int nthreads = 1;
 // Example:
 // static pthread_mutex_t seg_locks[NUM_SEGMENTS];
 // --------------------------------------------------------------------
+static pthread_mutex_t seg_locks[NUM_SEGMENTS];
+
 
 typedef struct {
     int tid;
@@ -45,7 +47,7 @@ typedef struct {
 // Example:
 // static pthread_barrier_t phase_barrier;
 // --------------------------------
-static pthread_barrier_t phase_barrier;
+// static pthread_barrier_t phase_barrier;
 
 
 //-------------------------------------------------------------------------------------
@@ -55,8 +57,9 @@ static pthread_barrier_t phase_barrier;
 // This function should return which segment a given user ID belongs to.
 //-------------------------------------------------------------------------------------
 int seg_index_for_id(int id) {
-    // TODO (Part 4)S: Compute and return which segment this id writes to 
-    return (id); // placeholder - update with correct return value
+    // TODO (Part 4)S: Compute and return which segment this id writes to A
+    int res = id/100;
+    return (res); // placeholder - update with correct return value
   }
 
 
@@ -126,9 +129,16 @@ void *thread_main(void *arg) {
    
 //pthread_mutex_lock(&global_lock);
 
+    int seg = seg_index_for_id(id);
+    pthread_mutex_lock(&seg_locks[seg]);
+
     for (int id = start; id < end; id++) {
       put_user(id);
     }
+
+    pthread_mutex_unlock(&seg_locks[seg]);
+
+
 //pthread_mutex_unlock(&global_lock);
 
 
@@ -145,7 +155,7 @@ void *thread_main(void *arg) {
     // Example:
     // pthread_barrier_wait(&phase_barrier);
     //-----------------------------------------------------------------
-    pthread_barrier_wait(&phase_barrier);
+    // pthread_barrier_wait(&phase_barrier);
 
     // Get Phase:  look up all users - all threads, each looks up one portion
         
@@ -196,7 +206,7 @@ int main(int argc, char **argv) {
     // Example:
     // pthread_barrier_init(&phase_barrier, NULL, nthreads);
     //---------------------------------------------------------
-    pthread_barrier_init(&phase_barrier, NULL, nthreads);
+    //pthread_barrier_init(&phase_barrier, NULL, nthreads);
 
 
     //--------------------------------------------------------
@@ -206,6 +216,10 @@ int main(int argc, char **argv) {
     //    pthread_mutex_init(&seg_locks[i], NULL);
     // }
     //--------------------------------------------------------
+    for (int i = 0; i < NUM_SEGMENTS; i++) {
+        pthread_mutex_init(&seg_locks[i], NULL);
+    }
+
 
     // Allocate shared table
     table = calloc(NUM_USERS, sizeof(User));
