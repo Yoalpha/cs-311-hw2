@@ -1,0 +1,20 @@
+
+ -------(no locks)-------
+
+Total completion time = 0.003185 seconds
+
+0: put time = 0.003087 s
+0: lookup time = 0.000010 s
+0: 0 users missing
+1: put time = 0.003048 s
+1: lookup time = 0.000023 s
+1: 0 users missing
+2: put time = 0.002645 s
+2: lookup time = 0.000027 s
+2: 1474 users missing
+3: put time = 0.002734 s
+3: lookup time = 0.000009 s
+3: 1186 users missing
+
+Total missing in table after threads complete =0
+
